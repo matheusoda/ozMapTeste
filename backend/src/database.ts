@@ -1,11 +1,21 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-const env = {
-  MONGO_URI: 'mongodb://root:example@127.0.0.1:27021/oz-tech-test?authSource=admin',
+dotenv.config();
+
+const init = async () => {
+    const mongoUri = process.env.MONGO_URI;
+    if (!mongoUri) {
+        throw new Error("MONGO_URI is not defined in environment variables");
+    }
+
+    try {
+        await mongoose.connect(mongoUri);
+        console.log("Connected to MongoDB");
+    } catch (error) {
+        console.error("Error connecting to MongoDB:", error);
+        process.exit(1);
+    }
 };
 
-const init = async function() {
-  await mongoose.connect(env.MONGO_URI);
-};
-
-export default init();
+export default init;
