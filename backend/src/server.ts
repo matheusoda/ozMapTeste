@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { UserModel } from "./models";
 
-const server = express(); // Instância principal do servidor
+export const server = express(); // Instância principal do servidor
 const router = express.Router(); // Instância do roteador
 
 // Middleware para processar JSON
@@ -15,6 +15,50 @@ const STATUS = {
     BAD_REQUEST: 400,
     INTERNAL_SERVER_ERROR: 500
 };
+
+// Criar um novo usuário
+router.post(
+    "/users",
+    async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void | any> => {
+        const { name, email, password, address, coordinates } = req.body; // Ajuste os campos conforme o modelo do UserModel
+
+        try {
+            // Validação básica
+            if (!name || !email || !password || (!address && !coordinates)) {
+                return res.status(STATUS.BAD_REQUEST).json({
+                    message: "Name, email, password, address are required"
+                });
+            }
+
+            if (address && coordinates) {
+                return res.status(STATUS.BAD_REQUEST).json({
+                    message: "Address, and coordinates cannot be sent together"
+                });
+            }
+
+            // Criar e salvar o usuário no banco de dados
+            const newUser = new UserModel({
+                name,
+                email,
+                password,
+                address,
+                coordinates
+            });
+            await newUser.save();
+
+            res.status(STATUS.CREATED).json({
+                message: "User created successfully",
+                user: newUser
+            });
+        } catch (error) {
+            next(error); // Passa o erro para o middleware de erro
+        }
+    }
+);
 
 // Listar usuários
 router.get(
