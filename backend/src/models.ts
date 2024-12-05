@@ -20,7 +20,6 @@ class Base extends TimeStamps {
 
 @pre<User>("save", async function (next) {
     const region = this as Omit<any, keyof User> & User;
-    console.log("----------REGION", region);
     if (region.isModified("coordinates")) {
         region.address = await lib.getAddressFromCoordinates(
             region.coordinates
