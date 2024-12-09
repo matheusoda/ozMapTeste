@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const init = async () => {
+export const startServer = async () => {
     const mongoUri = process.env.MONGO_URI;
     if (!mongoUri) {
         throw new Error("MONGO_URI is not defined in environment variables");
@@ -18,4 +18,4 @@ const init = async () => {
     }
 };
 
-export default init;
+startServer();
