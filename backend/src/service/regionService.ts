@@ -6,7 +6,7 @@ export class RegionService {
     }
 
     static async getRegions() {
-        return await RegionModel.find().populate("user").lean();
+        return await RegionModel.find().lean();
     }
 
     static async getRegionById(id: string) {

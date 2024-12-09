@@ -12,7 +12,7 @@ export class userController {
         res: Response,
         next: NextFunction
     ): Promise<void | any> {
-        const { name, email, password, address, coordinates } = req.body; // Ajuste os campos conforme o modelo do UserModel
+        const { name, email, password, address, coordinates } = req.body;
 
         try {
             // Validação básica
